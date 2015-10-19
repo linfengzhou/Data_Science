@@ -1,0 +1,24 @@
+
+import MapReduce
+import sys
+
+# Part 1: create MapReduce object
+mr = MapReduce.MapReduce()
+
+
+def mapper(friendship):
+
+    key = tuple(sorted(friendship))
+    mr.emit_intermediate(key, friendship[1])
+
+def reducer(key, friend_list):
+
+    if len(friend_list) == 1:
+        person = list(key)   ## start with both parties and remove friend
+        friend = friend_list[0]
+        person.remove(friend)
+        mr.emit([person[0], friend])
+        
+# Part 4
+inputdata = open(sys.argv[1])
+mr.execute(inputdata, mapper, reducer)
